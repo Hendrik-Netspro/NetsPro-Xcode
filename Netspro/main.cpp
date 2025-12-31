@@ -40,7 +40,7 @@ int main() {
     std::cout << "Willcommen Bei NETSPECTRE PRO cpp" << std::endl;
     std::cout << "bis jetzt is Netspro cpp noch kostenlos" << std::endl;
     std::cout << "wenn du einen kostenlosen accout willst Gebe feedback." << std::endl;
-    std::cout << "Feedback an:   Hendrik.Hanking@icloud.com" << std::endl;
+    std::cout << "Feedback an:   Hendrik.Hanking@icloud.com." << std::endl;
     std::cout << R"(   _  __    __    ____             __            ___  ___  ____ )" << std::endl;
     std::cout << R"(  / |/ /__ / /_  / __/__  ___ ____/ /________   / _ \/ _ \/ __ \)" << std::endl;
     std::cout << R"( /    / -_) __/ _\ \/ _ \/ -_) __/ __/ __/ -_) / ___/ , _/ /_/ /)" << std::endl;
