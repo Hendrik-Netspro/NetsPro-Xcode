@@ -37,6 +37,7 @@ void eingabe_abfragung(std::string& name, bool mode) {
 
 
 int main() {
+    clear_terminal();
     std::cout << "Willcommen Bei NETSPECTRE PRO cpp" << std::endl;
     std::cout << "bis jetzt is Netspro cpp noch kostenlos" << std::endl;
     std::cout << "wenn du einen kostenlosen accout willst Gebe feedback." << std::endl;
