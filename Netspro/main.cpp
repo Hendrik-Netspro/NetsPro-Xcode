@@ -16,12 +16,30 @@
 // ankündigungen
 void clear_terminal();
 void eingabe_abfragung();
+void hauptbildschirm();
+void handel_input();
 
 //ende
 //variablen
-bool DEV_MODE;
+std::string input;
+std::string version = "1.0.0a";
 
 //ende
+int main() {
+    clear_terminal();
+    hauptbildschirm();
+
+    while (true) {
+        eingabe_abfragung();
+        if (input == "exit") {
+            break;
+        }
+        handel_input();
+    }
+
+    return 0;
+}
+
 
 
 void clear_terminal() {
@@ -31,16 +49,30 @@ void clear_terminal() {
         std::system("clear");
     #endif
 }
-void eingabe_abfragung(std::string& name, bool mode) {
-    if (mode == true) {
-        
+void eingabe_abfragung() {
+    std::cout << "NETSPECTRETERMINEL (type 'exit' to quit):::>>";
+    std::getline(std::cin, input);
+}
+
+
+void handel_input() {
+    if (input == "info") {
+        std::cout << "NetSpectre Pro Terminel cpp edition" << std::endl;
+        std::cout << "V." << version << std::endl;
+    }
+    else if (input == "cls" || input == "clear") {
+        clear_terminal();
+    }
+    else if (input == "exit") {
+        // Do nothing here, main will handle exit
+    }
+    else {
+        std::cout << "Den command haben wir nicht gefunden. :(" << std::endl;
     }
 }
 
 
-
-int main() {
-    clear_terminal();
+void hauptbildschirm() {
     std::cout << "Willcommen Bei NETSPECTRE PRO cpp" << std::endl;
     std::cout << "bis jetzt is Netspro cpp noch kostenlos" << std::endl;
     std::cout << "wenn du einen kostenlosen accout willst Gebe feedback." << std::endl;
@@ -50,8 +82,7 @@ int main() {
     std::cout << R"( /    / -_) __/ _\ \/ _ \/ -_) __/ __/ __/ -_) / ___/ , _/ /_/ /)" << std::endl;
     std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << std::endl;
     std::cout << R"(C++ EDITION       /_/                                           )" << std::endl;
-    
-    return 0;
+    std::cout << " " << std::endl;
 }
 
 
