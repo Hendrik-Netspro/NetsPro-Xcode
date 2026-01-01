@@ -25,8 +25,11 @@ bool DEV_MODE;
 
 
 void clear_terminal() {
-    std::cout << "\x1b[2J\x1b[H";
-    std::cout.flush();
+    #if defined(_WIN32) || defined(_WIN64)
+        std::system("cls");
+    #else
+        std::system("clear");
+    #endif
 }
 void eingabe_abfragung(std::string& name, bool mode) {
     if (mode == true) {
