@@ -18,15 +18,18 @@ void clear_terminal();
 void eingabe_abfragung();
 void hauptbildschirm();
 void handel_input();
+std::string hole_seriennummer();
 
 //ende
 //variablen
 std::string input;
 std::string version = "1.0.0a";
+std::string seriennummer;
 
 //ende
 int main() {
     clear_terminal();
+    seriennummer = hole_seriennummer();
     hauptbildschirm();
 
     while (true) {
@@ -40,7 +43,45 @@ int main() {
     return 0;
 }
 
-
+std::string hole_seriennummer() {
+    std::string result;
+#if defined(_WIN32) || defined(_WIN64)
+    char buffer[128];
+    FILE* pipe = _popen("wmic bios get serialnumber", "r");
+    if (!pipe) return "Unbekannt";
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+        std::string line(buffer);
+        if (line.find("SerialNumber") == std::string::npos && !line.empty()) {
+            // Bereinige Zeilenumbruch
+            line.erase(line.find_last_not_of(" \n\r") + 1);
+            if (!line.empty()) result = line;
+        }
+    }
+    _pclose(pipe);
+#elif defined(__APPLE__)
+    char buffer[256];
+    FILE* pipe = popen("system_profiler SPHardwareDataType | awk '/Serial/ {print $4}'", "r");
+    if (!pipe) return "Unbekannt";
+    if (fgets(buffer, sizeof(buffer), pipe)) {
+        result = buffer;
+        // Entferne evtl. Zeilenumbruch
+        result.erase(result.find_last_not_of(" \n\r") + 1);
+    }
+    pclose(pipe);
+#elif defined(__linux__)
+    char buffer[256];
+    FILE* pipe = popen("cat /sys/class/dmi/id/product_serial", "r");
+    if (!pipe) return "Unbekannt";
+    if (fgets(buffer, sizeof(buffer), pipe)) {
+        result = buffer;
+        result.erase(result.find_last_not_of(" \n\r") + 1);
+    }
+    pclose(pipe);
+#else
+    result = "Unbekannt";
+#endif
+    return result.empty() ? "Unbekannt" : result;
+}
 
 void clear_terminal() {
     #if defined(_WIN32) || defined(_WIN64)
@@ -50,7 +91,7 @@ void clear_terminal() {
     #endif
 }
 void eingabe_abfragung() {
-    std::cout << "NETSPECTRETERMINEL (type 'exit' to quit):::>>";
+    std::cout << "NETSPECTREPROTERMINEL@" << seriennummer << ">>>" ;
     std::getline(std::cin, input);
 }
 
@@ -59,6 +100,7 @@ void handel_input() {
     if (input == "info") {
         std::cout << "NetSpectre Pro Terminel cpp edition" << std::endl;
         std::cout << "V." << version << std::endl;
+        std::cout << "Seriennummer: " << seriennummer << std::endl;
     }
     else if (input == "cls" || input == "clear") {
         clear_terminal();
