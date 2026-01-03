@@ -126,7 +126,7 @@ void verarbeiteEingabe() {
 }
 
 void tokenInitialisierer() {
-    tokenListe.push_back("Anna");
+    tokenListe.push_back("Laurenz.Flecki66");
     tokenListe.push_back("Hendrik.Hoppel10");
 }
 
