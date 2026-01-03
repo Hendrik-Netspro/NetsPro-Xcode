@@ -8,8 +8,6 @@
 
 #include <iostream>
 #include <string>
-#include <map>
-#include <functional>
 #include <cstdlib>
 #include <cstdio>
 #include <vector>
