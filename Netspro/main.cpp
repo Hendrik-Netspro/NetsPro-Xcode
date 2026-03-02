@@ -102,6 +102,7 @@ void terminalLeeren() {
         std::system("clear");
     #endif
 }
+
 void benutzereingabeAbfragen() {
     std::cout << "NETSPECTREPROTERMINAL@" << seriennummer << ">>> ";
     std::getline(std::cin, eingabe);
@@ -167,8 +168,6 @@ void anmeldung() {
 
 void hauptbildschirm() {
     std::cout << "Welcome to NETSPECTRE PRO C++" << std::endl;
-    std::cout << "So far Netspro C++ is still free" << std::endl;
-    std::cout << "If you want a free account, please provide feedback." << std::endl;
     std::cout << "Feedback: Hendrik.Hanking@icloud.com." << std::endl;
     std::cout << R"(   _  __    __    ____             __            ___  ___  ____ )" << std::endl;
     std::cout << R"(  / |/ /__ / /_  / __/__  ___ ____/ /________   / _ \/ _ \/ __ \)" << std::endl;
