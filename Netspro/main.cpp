@@ -136,11 +136,7 @@ void anmeldung() {
     std::getline(std::cin, benutzername);
     terminalLeeren();
     
-    std::cout << R"(   _  __    __    ____             __            ___  ___  ____ )" << std::endl;
-    std::cout << R"(  / |/ /__ / /_  / __/__  ___ ____/ /________   / _ \/ _ \/ __ \)" << std::endl;
-    std::cout << R"( /    / -_) __/ _\ \/ _ \/ -_) __/ __/ __/ -_) / ___/ , _/ /_/ /)" << std::endl;
-    std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << std::endl;
-    std::cout << R"(C++ EDITION       /_/                                           )" << std::endl;
+    logo();
     std::cout << std::endl;
     std::cout << "Password for " << benutzername << ": ";
     std::getline(std::cin, passwort);
@@ -162,11 +158,7 @@ void anmeldung() {
 void hauptbildschirm() {
     std::cout << "Welcome to NETSPECTRE PRO C++" << std::endl;
     std::cout << "Feedback: Hendrik.Hanking@icloud.com." << std::endl;
-    std::cout << R"(   _  __    __    ____             __            ___  ___  ____ )" << std::endl;
-    std::cout << R"(  / |/ /__ / /_  / __/__  ___ ____/ /________   / _ \/ _ \/ __ \)" << std::endl;
-    std::cout << R"( /    / -_) __/ _\ \/ _ \/ -_) __/ __/ __/ -_) / ___/ , _/ /_/ /)" << std::endl;
-    std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << std::endl;
-    std::cout << R"(C++ EDITION       /_/                                           )" << std::endl;
+    logo();
     std::cout << " " << std::endl;
 }
 
