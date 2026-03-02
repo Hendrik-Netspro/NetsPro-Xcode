@@ -6,14 +6,10 @@
 //  COPYRIGHT Hendrik Vincent Hanking 2025
 //  All rights reserved
 
-#include <iostream>
-#include <string>
-#include <cstdlib>
-#include <cstdio>
-#include <vector>
-#include <algorithm>
-#include <thread>
 #include <chrono>
+#include <iostream>
+#include <thread>
+#include <algorithm>
 
 // declarations
 void terminalLeeren();
@@ -23,6 +19,7 @@ void verarbeiteEingabe();
 std::string holeSeriennummer();
 void anmeldung();
 void tokenInitialisierer();
+void logo();
 
 // end
 // variables
@@ -127,17 +124,13 @@ void verarbeiteEingabe() {
 }
 
 void tokenInitialisierer() {
-    tokenListe.push_back("Laurenz.Flecki66");
-    tokenListe.push_back("Hendrik.Hoppel10");
+    tokenListe.emplace_back("Laurenz.Flecki66");
+    tokenListe.emplace_back("Hendrik.Hoppel10");
 }
 
 
 void anmeldung() {
-    std::cout << R"(   _  __    __    ____             __            ___  ___  ____ )" << std::endl;
-    std::cout << R"(  / |/ /__ / /_  / __/__  ___ ____/ /________   / _ \/ _ \/ __ \)" << std::endl;
-    std::cout << R"( /    / -_) __/ _\ \/ _ \/ -_) __/ __/ __/ -_) / ___/ , _/ /_/ /)" << std::endl;
-    std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << std::endl;
-    std::cout << R"(C++ EDITION       /_/                                           )" << std::endl;
+    logo();
     std::cout << std::endl;
     std::cout << "Username: ";
     std::getline(std::cin, benutzername);
@@ -175,6 +168,15 @@ void hauptbildschirm() {
     std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << std::endl;
     std::cout << R"(C++ EDITION       /_/                                           )" << std::endl;
     std::cout << " " << std::endl;
+}
+
+void logo() {
+    std::cout << R"(   _  __    __    ____             __            ___  ___  ____ )" << std::endl;
+    std::cout << R"(  / |/ /__ / /_  / __/__  ___ ____/ /________   / _ \/ _ \/ __ \)" << std::endl;
+    std::cout << R"( /    / -_) __/ _\ \/ _ \/ -_) __/ __/ __/ -_) / ___/ , _/ /_/ /)" << std::endl;
+    std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << std::endl;
+    std::cout << R"(C++ EDITION       /_/                                           )" << std::endl;
+
 }
 
 
