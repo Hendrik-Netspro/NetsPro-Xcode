@@ -67,7 +67,7 @@ std::vector<std::string> tokenListe;
 // AkteViewer Shift (muss gleich bleiben)
 static const std::vector<int> SHIFT = {9, 9, 4, 13, 2, 10, 3};
 
-// ===================== Main =====================
+// ===================== Main ==============================================================================
 int main() {
     terminalLeeren();
     tokenInitialisierer();
