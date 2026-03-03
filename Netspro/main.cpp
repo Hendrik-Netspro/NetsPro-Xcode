@@ -147,7 +147,7 @@ static void help() {
     std::cout << "  exit                - beenden\n\n";
 }
 
-static bool stasarts_with(const std::strinsfg& s, const std::string& prefix) {
+static bool starts_with(const std::string& s, const std::string& prefix) {
     return s.rfind(prefix, 0) == 0;
 }
 
