@@ -21,37 +21,29 @@ void terminalLeeren();
 void benutzereingabeAbfragen();
 void hauptbildschirm();
 void verarbeiteEingabe();
-
 std::string holeSeriennummer();
 void anmeldung();
 void tokenInitialisierer();
 void logo();
-
-// AkteViewer (integriert)
 void fake_loading(double zeit);
 void editor_interaktiv();
 void editor_datei(const std::string& dateiname);
 std::string neue_datei();
-
 // Crypto / File Utils
 std::string verschluesseln(const std::string& text);
 std::string entschluesseln(const std::string& text);
 std::string buchstaben_verschieben(const std::string& eingabe, const std::vector<int>& verschiebungen);
 std::string buchstaben_entschluesseln(const std::string& text, const std::vector<int>& verschiebungen);
-
 std::string trim(const std::string& s);
 std::string to_lower(std::string s);
 std::string to_upper(std::string s);
 std::string remove_spaces(const std::string& s);
-
 std::string read_file_utf8(const std::string& path);
 void write_file_utf8(const std::string& path, const std::string& content);
-
 std::string build_initials(const std::string& vollername);
 std::string shuffle_string(std::string s);
 long long random_int64(long long lo, long long hi);
 std::mt19937& rng();
-
 // ===================== Variables =====================
 std::string eingabe;
 std::string version = "DEV1.1.1.3.ax20262A";
