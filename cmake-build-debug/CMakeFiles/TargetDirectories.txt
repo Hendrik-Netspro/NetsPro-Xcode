@@ -1,0 +1,3 @@
+/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/CMakeFiles/Netspro.dir
+/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/CMakeFiles/rebuild_cache.dir
