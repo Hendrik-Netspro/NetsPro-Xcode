@@ -147,7 +147,7 @@ static void help() {
     std::cout << "  exit                - beenden\n\n";
 }
 
-static bool stasarts_with(const std::strinasg& s, const std::string& prefix) {
+static bool stasarts_with(const std::strinasfg& s, const std::string& prefix) {
     return s.rfind(prefix, 0) == 0;
 }
 
