@@ -15,6 +15,7 @@
 #include <string>
 #include <fstream>
 #include <random>
+#include <cctype>
 
 // ===================== Declarations =====================
 void terminalLeeren();
@@ -25,6 +26,9 @@ std::string holeSeriennummer();
 void anmeldung();
 void tokenInitialisierer();
 void logo();
+bool dev_mode = false;
+bool developer = false;
+// AkteViewer
 void fake_loading(double zeit);
 void editor_interaktiv();
 void editor_datei(const std::string& dateiname);
@@ -44,6 +48,7 @@ std::string build_initials(const std::string& vollername);
 std::string shuffle_string(std::string s);
 long long random_int64(long long lo, long long hi);
 std::mt19937& rng();
+
 // ===================== Variables =====================
 std::string eingabe;
 std::string version = "DEV1.1.1.3.ax20262A";
@@ -53,13 +58,16 @@ std::string benutzername;
 std::string passwort;
 std::string gebildetesToken;
 
-// user tokens
-std::vector<std::string> tokenListe;
+// tokens
+std::vector<std::string> userTokens;
+std::vector<std::string> devTokens;
 
-// AkteViewer Shift (muss gleich bleiben)
 static const std::vector<int> SHIFT = {9, 9, 4, 13, 2, 10, 3};
 
-// ===================== Main ==============================================================================
+
+
+
+// ===================== Main ============================================================  BEGINN des codes
 int main() {
     terminalLeeren();
     tokenInitialisierer();
@@ -68,7 +76,7 @@ int main() {
 
     while (true) {
         benutzereingabeAbfragen();
-        if (eingabe == "exit") break;
+        if (trim(eingabe) == "exit") break;
         verarbeiteEingabe();
     }
 
@@ -123,7 +131,9 @@ void terminalLeeren() {
 }
 
 void benutzereingabeAbfragen() {
-    std::cout << "NETSPECTREPROCPP@" << seriennummer << ">>> ";
+    std::cout << "NETSPECTREPROCPP@" << seriennummer;
+    if (dev_mode) std::cout << "[DEV]";
+    std::cout << ">>> ";
     std::getline(std::cin, eingabe);
 }
 
@@ -136,7 +146,10 @@ static void help() {
     std::cout << "  akte neu            - neue Akte erstellen + öffnen\n";
     std::cout << "  akte open <Name>    - <Name>.persondata öffnen\n";
     std::cout << "  help                - diese Hilfe\n";
-    std::cout << "  exit                - beenden\n\n";
+    std::cout << "  exit                - beenden\n";
+    std::cout << "\nDev Commands:\n";
+    std::cout << "  devinfo             - zeigt Dev-Status\n";
+    std::cout << "  devmode on|off      - (nur DEV) toggle\n\n";
 }
 
 static bool starts_with(const std::string& s, const std::string& prefix) {
@@ -150,14 +163,10 @@ void verarbeiteEingabe() {
         std::cout << "NetSpectre Pro Terminal C++ edition\n";
         std::cout << "V." << version << "\n";
         std::cout << "Serial number: " << seriennummer << "\n";
+        std::cout << "Dev mode: " << (dev_mode ? "true" : "false") << "\n";
     }
     else if (cmd == "cls" || cmd == "clear") {
-        if (cmd.find("-l") != std::string::npos) {
-            hauptbildschirm();
-        }
-        else {
-            terminalLeeren();
-        }
+        terminalLeeren();
     }
     else if (cmd == "help") {
         help();
@@ -183,6 +192,20 @@ void verarbeiteEingabe() {
         terminalLeeren();
         hauptbildschirm();
     }
+    else if (cmd == "devinfo") {
+        std::cout << "Developer mode is " << (dev_mode ? "ON" : "OFF") << "\n";
+        std::cout << "User: " << benutzername << "\n";
+    }
+    else if (starts_with(cmd, "devmode ")) {
+        std::string arg = to_lower(trim(cmd.substr(std::string("devmode ").size())));
+        if (!developer) {
+            std::cout << "Access denied (DEV only).\n";
+            return;
+        }
+        if (arg == "on") dev_mode = true;
+        else if (arg == "off") dev_mode = false;
+        else std::cout << "Usage: devmode on|off\n";
+    }
     else if (cmd == "exit") {
         // main handles exit
     }
@@ -194,8 +217,12 @@ void verarbeiteEingabe() {
 
 // ===================== Login =====================
 void tokenInitialisierer() {
-    tokenListe.emplace_back("Laurenz.Flecki66");
-    tokenListe.emplace_back("Hendrik.Hoppel10");
+    // normale Nutzer
+    userTokens.emplace_back("Laurenz.Flecki66");
+    userTokens.emplace_back("Hendrik.Hoppel10");
+
+    // Entwickler
+    devTokens.emplace_back("Hendrik_dev.Hoppel10");
 }
 
 void anmeldung() {
@@ -210,30 +237,57 @@ void anmeldung() {
 
     gebildetesToken = benutzername + "." + passwort;
 
-    if (std::find(tokenListe.begin(), tokenListe.end(), gebildetesToken) != tokenListe.end()) {
+    if (std::find(devTokens.begin(), devTokens.end(), gebildetesToken) != devTokens.end()) {
+        dev_mode = true;
+        developer = true;
+        terminalLeeren();
+        std::cout << "[Developer Mode]\n";
+        hauptbildschirm();
+        return;
+    }
+
+    if (std::find(userTokens.begin(), userTokens.end(), gebildetesToken) != userTokens.end()) {
+        dev_mode = false;
+        developer = false;
         terminalLeeren();
         hauptbildschirm();
-    } else {
-        std::cout << "Username or password not recognized.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(4));
-        terminalLeeren();
-        anmeldung();
+        return;
     }
+
+    std::cout << "Username or password not recognized.\n";
+    std::this_thread::sleep_for(std::chrono::seconds(4));
+    terminalLeeren();
+    anmeldung();
 }
 
 void hauptbildschirm() {
+    if (dev_mode) {
+        std::cout << "Version: " << version << "\n";
+    }
+    else {
+        std::cout << "Welcome to NETSPECTRE PRO C++\n";
+        std::cout << "Version: " << short_version << "\n";
+        std::cout << "Feedback: Hendrik.Hanking@icloud.com.\n";
+    }
     logo();
-    std::cout << "Version: " << short_version << "\n";
-    std::cout << "Feedback: Hendrik.Hanking@icloud.com.\n";
     std::cout << "\n";
 }
 
 void logo() {
-    std::cout << R"(   _  __    __    ____             __            ___  ___  ____ )" << "\n";
-    std::cout << R"(  / |/ /__ / /_  / __/__  ___ ____/ /________   / _ \/ _ \/ __ \)" << "\n";
-    std::cout << R"( /    / -_) __/ _\ \/ _ \/ -_) __/ __/ __/ -_) / ___/ , _/ /_/ /)" << "\n";
-    std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << "\n";
-    std::cout << R"(C++ EDITION       /_/                                           )" << "\n";
+    if (dev_mode) {
+        std::cout << R"(   _  __    __    ____             __            ___  ___  ____ )" << "\n";
+        std::cout << R"(  / |/ /__ / /_  / __/__  ___ ____/ /________   / _ \/ _ \/ __ \)" << "\n";
+        std::cout << R"( /    / -_) __/ _\ \/ _ \/ -_) __/ __/ __/ -_) / ___/ , _/ /_/ /)" << "\n";
+        std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << "\n";
+        std::cout << R"(C++ EDITION       /_/                     Welcome developer! :) )" << "\n";
+    }
+    else {
+        std::cout << R"(   _  __    __    ____             __            ___  ___  ____ )" << "\n";
+        std::cout << R"(  / |/ /__ / /_  / __/__  ___ ____/ /________   / _ \/ _ \/ __ \)" << "\n";
+        std::cout << R"( /    / -_) __/ _\ \/ _ \/ -_) __/ __/ __/ -_) / ___/ , _/ /_/ /)" << "\n";
+        std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << "\n";
+        std::cout << R"(C++ EDITION       /_/                                           )" << "\n";
+    }
 }
 
 // ===================== AkteViewer - UX =====================
