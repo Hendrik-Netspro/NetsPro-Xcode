@@ -15,7 +15,7 @@
 #include <string>
 #include <fstream>
 #include <random>
-#include <cctype>
+#include <iomanip>
 
 // ===================== Declarations =====================
 void terminalLeeren();
@@ -86,40 +86,65 @@ int main() {
 // ===================== System Infos =====================
 std::string holeSeriennummer() {
     std::string result;
+
 #if defined(_WIN32) || defined(_WIN64)
-    char buffer[128];
-    FILE* pipe = _popen("wmic bios get serialnumber", "r");
-    if (!pipe) return "Unknown";
-    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
-        std::string line(buffer);
-        if (line.find("SerialNumber") == std::string::npos && !line.empty()) {
-            line.erase(line.find_last_not_of(" \n\r") + 1);
-            if (!line.empty()) result = line;
-        }
-    }
-    _pclose(pipe);
-#elif defined(__APPLE__)
+
     char buffer[256];
-    FILE* pipe = popen("system_profiler SPHardwareDataType | awk '/Serial/ {print $4}'", "r");
+
+    // moderner Ersatz für WMIC
+    const char* cmd =
+    "powershell -NoProfile -Command \"(Get-CimInstance Win32_BIOS).SerialNumber\"";
+
+    FILE* pipe = _popen(cmd, "r");
     if (!pipe) return "Unknown";
+
     if (fgets(buffer, sizeof(buffer), pipe)) {
         result = buffer;
-        result.erase(result.find_last_not_of(" \n\r") + 1);
+        result.erase(result.find_last_not_of(" \n\r\t") + 1);
     }
+
+    _pclose(pipe);
+
+#elif defined(__APPLE__)
+
+    char buffer[256];
+    FILE* pipe = popen(
+        "system_profiler SPHardwareDataType | awk '/Serial/ {print $4}'", "r"
+    );
+
+    if (!pipe) return "Unknown";
+
+    if (fgets(buffer, sizeof(buffer), pipe)) {
+        result = buffer;
+        result.erase(result.find_last_not_of(" \n\r\t") + 1);
+    }
+
     pclose(pipe);
+
 #elif defined(__linux__)
+
     char buffer[256];
     FILE* pipe = popen("cat /sys/class/dmi/id/product_serial", "r");
+
     if (!pipe) return "Unknown";
+
     if (fgets(buffer, sizeof(buffer), pipe)) {
         result = buffer;
-        result.erase(result.find_last_not_of(" \n\r") + 1);
+        result.erase(result.find_last_not_of(" \n\r\t") + 1);
     }
+
     pclose(pipe);
+
 #else
+
     result = "Unknown";
+
 #endif
-    return result.empty() ? "Unknown" : result;
+
+    if (result.empty())
+        result = "Unknown";
+
+    return result;
 }
 
 void terminalLeeren() {
@@ -220,6 +245,7 @@ void tokenInitialisierer() {
     // normale Nutzer
     userTokens.emplace_back("Laurenz.Flecki66");
     userTokens.emplace_back("Hendrik.Hoppel10");
+    userTokens.emplace_back("Joerg.hamburg");
 
     // Entwickler
     devTokens.emplace_back("Hendrik_dev.Hoppel10");
