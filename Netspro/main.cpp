@@ -87,7 +87,9 @@ int main() {
 std::string holeSeriennummer() {
     std::string result;
 
+
 #if defined(_WIN32) || defined(_WIN64)
+
 
     char buffer[256];
 
@@ -132,9 +134,6 @@ std::string holeSeriennummer() {
         result = buffer;
         result.erase(result.find_last_not_of(" \n\r\t") + 1);
     }
-
-    pclose(pipe);
-
 #else
 
     result = "Unknown";
