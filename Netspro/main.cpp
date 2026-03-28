@@ -15,7 +15,6 @@
 #include <string>
 #include <fstream>
 #include <random>
-#include <iomanip>
 
 // ===================== Declarations =====================
 void terminalLeeren();
@@ -36,7 +35,7 @@ std::string neue_datei();
 // Crypto / File Utils
 std::string verschluesseln(const std::string& text);
 std::string entschluesseln(const std::string& text);
-std::string buchstaben_verschieben(const std::string& eingabe, const std::vector<int>& verschiebungen);
+std::string buchstaben_verschieben(const std::string& input_text, const std::vector<int>& verschiebungen);
 std::string buchstaben_entschluesseln(const std::string& text, const std::vector<int>& verschiebungen);
 std::string trim(const std::string& s);
 std::string to_lower(std::string s);
@@ -48,6 +47,7 @@ std::string build_initials(const std::string& vollername);
 std::string shuffle_string(std::string s);
 long long random_int64(long long lo, long long hi);
 std::mt19937& rng();
+bool endsWith(const std::string& str, const std::string& suffix);
 
 // ===================== Variables =====================
 std::string eingabe;
@@ -166,6 +166,7 @@ static void help() {
     std::cout << "\nCommands:\n";
     std::cout << "  info                - Version/Serial\n";
     std::cout << "  cls | clear          - Terminal leeren\n";
+    std::cout << "  cls -l | clear -l    - leeren + Logo neu anzeigen\n";
     std::cout << "  akte                - AkteViewer (fragt Datei/neu)\n";
     std::cout << "  akte neu            - neue Akte erstellen + öffnen\n";
     std::cout << "  akte open <Name>    - <Name>.persondata öffnen\n";
@@ -191,6 +192,10 @@ void verarbeiteEingabe() {
     }
     else if (cmd == "cls" || cmd == "clear") {
         terminalLeeren();
+    }
+    else if (cmd == "cls -l" || cmd == "clear -l") {
+        terminalLeeren();
+        hauptbildschirm();
     }
     else if (cmd == "help") {
         help();
@@ -317,8 +322,8 @@ void logo() {
 
 // ===================== AkteViewer - UX =====================
 void fake_loading(double zeit) {
-    const int steps = 10;
-    double warten = zeit / steps;
+    constexpr int steps = 10;
+    double warten = zeit / static_cast<double>(steps);
 
     for (int fsteps = 0; fsteps <= steps; ++fsteps) {
         terminalLeeren();
@@ -467,13 +472,13 @@ std::string neue_datei() {
 }
 
 // ===================== Crypto =====================
-std::string buchstaben_verschieben(const std::string& eingabe,
+std::string buchstaben_verschieben(const std::string& input_text,
                                    const std::vector<int>& verschiebungen) {
     std::string verschluesselt;
-    verschluesselt.reserve(eingabe.size());
+    verschluesselt.reserve(input_text.size());
     size_t verschiebungs_index = 0;
 
-    for (unsigned char uc : eingabe) {
+    for (unsigned char uc : input_text) {
         char buchstabe = static_cast<char>(uc);
 
         if (std::isalpha(uc)) {
@@ -493,8 +498,7 @@ std::string buchstaben_verschieben(const std::string& eingabe,
     return verschluesselt;
 }
 
-std::string buchstaben_entschluesseln(const std::string& text,
-                                      const std::vector<int>& verschiebungen) {
+std::string buchstaben_entschluesseln(const std::string& text,const std::vector<int>& verschiebungen) {
     std::string entschluesselt;
     entschluesselt.reserve(text.size());
     size_t verschiebungs_index = 0;
@@ -600,4 +604,9 @@ std::string build_initials(const std::string& vollername) {
         }
     }
     return initials;
+}
+
+bool endsWith(const std::string& str, const std::string& suffix) {
+    if (str.length() < suffix.length()) return false;
+    return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
 }

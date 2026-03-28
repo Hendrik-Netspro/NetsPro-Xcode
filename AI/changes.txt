@@ -3,3 +3,6 @@
 - AI/info.txt mit dauerhaften Arbeitsregeln fuer neue Threads befuellt.
 - Netspro/main.cpp: erste Zeile angepasst auf `// a` (Testaenderung).
 - AI/info.txt: Regel fuer Aenderungsdokumentation verschaerft (jede einzelne Aenderung MUSS sofort in AI/changes.txt stehen, ohne Ausnahme).
+- Netspro/main.cpp: `cls -l` und `clear -l` als eigene Kommandos eingebaut (Terminal leeren + Hauptbildschirm/Logo erneut anzeigen); Hilfeausgabe um diese Option erweitert.
+- Netspro/main.cpp: IDE-Warnstellen bereinigt (ungenutztes Include `<iomanip>` entfernt, `steps` in `fake_loading` auf `constexpr` umgestellt, Formatierung der Signatur von `buchstaben_verschieben` vereinheitlicht).
+- Netspro/main.cpp: Parametername `eingabe` in `buchstaben_verschieben` auf `input_text` umbenannt (IDE-Warnung wegen Namensueberschattung der globalen Variable `eingabe` beseitigt).
