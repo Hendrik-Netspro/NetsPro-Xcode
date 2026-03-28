@@ -155,7 +155,7 @@ void terminalLeeren() {
 }
 
 void benutzereingabeAbfragen() {
-    std::cout << "NETSPECTREPROCPP@" << seriennummer;
+    std::cout << "NETSPECTRE@" << seriennummer;
     if (dev_mode) std::cout << "[DEV]";
     std::cout << ">>> ";
     std::getline(std::cin, eingabe);
@@ -472,8 +472,7 @@ std::string neue_datei() {
 }
 
 // ===================== Crypto =====================
-std::string buchstaben_verschieben(const std::string& input_text,
-                                   const std::vector<int>& verschiebungen) {
+std::string buchstaben_verschieben(const std::string& input_text,const std::vector<int>& verschiebungen) {
     std::string verschluesselt;
     verschluesselt.reserve(input_text.size());
     size_t verschiebungs_index = 0;
