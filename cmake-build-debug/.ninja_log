@@ -1,5 +1,7 @@
 # ninja log v6
-860	1048	1774446393170362964	Netspro	530f7eb1ded2e1cd
+2	134	1774699642570984099	build.ninja	6e5e9787e872ec54
+2	134	1774699642569922552	/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/cmake_install.cmake	6e5e9787e872ec54
 1	858	1774446392311744667	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	e837203f59efa3c1
-2	134	1774606344537826266	/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/cmake_install.cmake	6e5e9787e872ec54
-2	134	1774606344541662895	build.ninja	6e5e9787e872ec54
+860	1048	1774446393170362964	Netspro	530f7eb1ded2e1cd
+5	1957	1774699642622085488	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	e2e3d24a53d44e27
+1957	2088	1774699644574497571	Netspro	bf5689cbacb2dd37

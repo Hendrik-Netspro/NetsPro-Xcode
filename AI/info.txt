@@ -1,0 +1,14 @@
+# AI-Arbeitsregeln fuer neue Threads
+
+Ziel: Diese Datei enthaelt dauerhaftes Projektwissen, damit ich in neuen Threads schnell wieder im Kontext bin.
+
+Regeln:
+1. Jede einzelne Aenderung am Projekt MUSS sofort in `AI/changes.txt` dokumentiert werden (ohne Ausnahme, auch kleine Testaenderungen).
+2. Dinge, an die ich mich spaeter erinnern soll, in `todo.txt` eintragen.
+3. Allgemeine Entwicklungsinfos, Architekturwissen, Entscheidungen und Beobachtungen in `info.txt` sammeln.
+4. Eintraege klar und so schreiben, dass ich sie spaeter eindeutig wiederverstehe.
+
+Ablauf in neuen Threads:
+1. Zuerst `AI/info.txt`, `AI/todo.txt` und `AI/changes.txt` lesen.
+2. Danach erst Code aendern.
+3. Nach jeder Aenderung sofort `AI/changes.txt` aktualisieren. Erst danach gilt die Aenderung als abgeschlossen.

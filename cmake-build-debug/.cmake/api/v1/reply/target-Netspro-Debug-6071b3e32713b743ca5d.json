@@ -29,13 +29,18 @@
 			}
 		]
 	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	},
 	"compileGroups" : 
 	[
 		{
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -arch arm64 -fcolor-diagnostics"
+					"fragment" : "-g -fcolor-diagnostics"
 				}
 			],
 			"language" : "CXX",
