@@ -6,3 +6,5 @@
 - Netspro/main.cpp: `cls -l` und `clear -l` als eigene Kommandos eingebaut (Terminal leeren + Hauptbildschirm/Logo erneut anzeigen); Hilfeausgabe um diese Option erweitert.
 - Netspro/main.cpp: IDE-Warnstellen bereinigt (ungenutztes Include `<iomanip>` entfernt, `steps` in `fake_loading` auf `constexpr` umgestellt, Formatierung der Signatur von `buchstaben_verschieben` vereinheitlicht).
 - Netspro/main.cpp: Parametername `eingabe` in `buchstaben_verschieben` auf `input_text` umbenannt (IDE-Warnung wegen Namensueberschattung der globalen Variable `eingabe` beseitigt).
+2026-03-29
+- Netspro/main.cpp: Testaenderung in Zeile 1 rueckgaengig gemacht (`// a` wieder auf `//` gesetzt).
