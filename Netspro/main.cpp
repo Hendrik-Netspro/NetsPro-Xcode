@@ -159,7 +159,7 @@ void benutzereingabeAbfragen() {
     if (dev_mode) std::cout << "[DEV]";
     std::cout << ">>> ";
     std::getline(std::cin, eingabe);
-} 
+}
 
 // ===================== Command Handling =====================
 static void help() {
