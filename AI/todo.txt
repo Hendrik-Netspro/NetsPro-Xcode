@@ -1,0 +1,3 @@
+- Plugin-System bauen:
+  Hauptprogramm soll Plugins aus separaten C++-Dateien laden koennen.
+  Plugins sollen eigene Befehle beim Hauptprogramm registrieren/anmelden koennen.
