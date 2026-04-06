@@ -16,6 +16,8 @@
 #include <fstream>
 #include <random>
 
+#include "../Plugins/JARVIS/python_runner.h"
+
 // ===================== Declarations =====================
 void terminalLeeren();
 void benutzereingabeAbfragen();
@@ -27,6 +29,8 @@ void tokenInitialisierer();
 void logo();
 bool dev_mode = false;
 bool developer = false;
+// Jarvis
+void Start_Jarvis();
 // AkteViewer
 void fake_loading(double zeit);
 void editor_interaktiv();
@@ -57,14 +61,10 @@ std::string seriennummer;
 std::string benutzername;
 std::string passwort;
 std::string gebildetesToken;
-
-// tokens
 std::vector<std::string> userTokens;
 std::vector<std::string> devTokens;
 
 static const std::vector<int> SHIFT = {9, 9, 4, 13, 2, 10, 3};
-
-
 
 
 // ===================== Main ============================================================  BEGINN des codes
@@ -238,6 +238,9 @@ void verarbeiteEingabe() {
     else if (cmd == "exit") {
         // main handles exit
     }
+    else if (cmd == "Jarvis") {
+        Start_Jarvis();
+    }
     else {
         std::cout << "Command not found :(\n";
         std::cout << "Tipp: 'help'\n";
@@ -318,6 +321,18 @@ void logo() {
         std::cout << R"(/_/|_/\__/\__/ /___/ .__/\__/\__/\__/_/  \__/ /_/  /_/|_|\____/ )" << "\n";
         std::cout << R"(C++ EDITION       /_/                                           )" << "\n";
     }
+}
+// ===================== JARVIS ==============================
+void Start_Jarvis() {
+    std::string input;
+
+    std::cout << "Du: ";
+    std::getline(std::cin, input);
+
+    std::string antwort = runPython(input);
+
+    std::cout << antwort << std::endl;
+
 }
 
 // ===================== AkteViewer - UX =====================
