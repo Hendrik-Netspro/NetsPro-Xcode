@@ -170,6 +170,7 @@ static void help() {
     std::cout << "  akte                - AkteViewer (fragt Datei/neu)\n";
     std::cout << "  akte neu            - neue Akte erstellen + öffnen\n";
     std::cout << "  akte open <Name>    - <Name>.persondata öffnen\n";
+    std::cout << "  jarvis-serve        - startet den JARVIS-Chat\n";
     std::cout << "  help                - diese Hilfe\n";
     std::cout << "  exit                - beenden\n";
     std::cout << "\nDev Commands:\n";
@@ -238,7 +239,7 @@ void verarbeiteEingabe() {
     else if (cmd == "exit") {
         // main handles exit
     }
-    else if (cmd == "Jarvis") {
+    else if (to_lower(cmd) == "jarvis-serve") {
         Start_Jarvis();
     }
     else {
@@ -326,15 +327,17 @@ void logo() {
 void Start_Jarvis() {
     std::string input;
 
-    std::cout << "Du: ";
-    std::getline(std::cin, input);
+    while (input != "exit") {
+        std::cout << "Du: ";
+        std::getline(std::cin, input);
 
-    std::string antwort = runPython(input);
+        if (input == "exit") break;
 
-    std::cout << antwort << std::endl;
+        std::string antwort = runPython(input);
 
+        std::cout << "Jarvis: " << antwort << std::endl;
+    }
 }
-
 // ===================== AkteViewer - UX =====================
 void fake_loading(double zeit) {
     constexpr int steps = 10;

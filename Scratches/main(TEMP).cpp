@@ -2,7 +2,7 @@
 // Created by Hendrik Hanking on 06.04.26.
 //
 #include <iostream>
-#include "python_runner.h"
+#include "../Plugins/JARVIS/python_runner.h"
 
 int main() {
     std::string input;

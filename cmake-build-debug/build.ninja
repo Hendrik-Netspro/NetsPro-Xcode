@@ -69,16 +69,16 @@ build CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o: CXX_COMPILER__N
 
 
 #############################################
-# Link the executable Netspro
+# Link the executable release/Netspro
 
-build Netspro: CXX_EXECUTABLE_LINKER__Netspro_Debug CMakeFiles/Netspro.dir/Netspro/main.cpp.o CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o
+build release/Netspro: CXX_EXECUTABLE_LINKER__Netspro_Debug CMakeFiles/Netspro.dir/Netspro/main.cpp.o CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o
   CONFIG = Debug
   FLAGS = -g -arch arm64
   LINK_FLAGS = -Wl,-search_paths_first -Wl,-headerpad_max_install_names
   OBJECT_DIR = CMakeFiles/Netspro.dir
-  POST_BUILD = :
+  POST_BUILD = cd /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E make_directory /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/release/Plugins/JARVIS && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E copy_if_different /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Plugins/JARVIS/AI.py /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/release/Plugins/JARVIS/AI.py
   PRE_LINK = :
-  TARGET_FILE = Netspro
+  TARGET_FILE = release/Netspro
   TARGET_PDB = Netspro.dbg
 
 
@@ -107,6 +107,8 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
+build Netspro: phony release/Netspro
+
 # =============================================================================
 # Folder targets.
 
@@ -122,7 +124,7 @@ build codegen: phony
 #############################################
 # Folder: /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug
 
-build all: phony Netspro
+build all: phony release/Netspro
 
 # =============================================================================
 # Built-in targets

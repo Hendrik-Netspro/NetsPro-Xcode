@@ -19,6 +19,7 @@ NetSpectre Pro is a terminal-like CLI application written in C++. It provides a 
 - `akte` — interactive mode: open a file (or create a new one)
 - `akte neu` — create a new `.persondata` file and open it
 - `akte open <Name>` — open `<Name>.persondata`
+- `jarvis-serve` — start the JARVIS chat loop
 - `help` — show commands
 - `exit` — exit program
 
