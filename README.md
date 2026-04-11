@@ -129,11 +129,14 @@ ollama pull llama3:latest
 
 ```powershell
 py -m pip install --upgrade pip ollama
-winget install --id Ollama.Ollama -e
+winget install --id Ollama.Ollama -e --accept-package-agreements --accept-source-agreements
 ollama pull qwen2:1.5b
 ollama pull phi3.5:latest
 ollama pull llama3:latest
 ```
+
+If `winget` reports that the install was canceled by the user, run PowerShell as Administrator and retry.  
+If it still fails, install Ollama directly from: https://ollama.com/download/windows
 
 Then start NetSpectre Pro and run:
 
@@ -207,6 +210,7 @@ jarvis-local
   - Ollama is installed and running
   - required models are pulled
   - Python package `ollama` is installed
+  - on Windows, `winget` install was not canceled (`--accept-package-agreements --accept-source-agreements`)
 
 ## License / Copyright
 
