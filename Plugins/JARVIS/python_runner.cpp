@@ -17,7 +17,12 @@ std::string runPython(const std::string& input) {
     std::string command = "python3 -u \"" + scriptPath + "\" --stream \"" + input + "\"";
     std::string result;
 
-    FILE* pipe = popen(command.c_str(), "r");
+    FILE* pipe = nullptr;
+#if defined(_WIN32) || defined(_WIN64)
+    pipe = _popen(command.c_str(), "r");
+#else
+    pipe = popen(command.c_str(), "r");
+#endif
     if (!pipe) {
         return "Error while starting Python!";
     }
@@ -30,6 +35,10 @@ std::string runPython(const std::string& input) {
         result.push_back(c);
     }
 
+#if defined(_WIN32) || defined(_WIN64)
+    _pclose(pipe);
+#else
     pclose(pipe);
+#endif
     return result;
 }

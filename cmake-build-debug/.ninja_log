@@ -1,18 +1,10 @@
 # ninja log v6
-9	528	1775853851491471650	build.ninja	6e5e9787e872ec54
-63	1971	1775853394070842994	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	4c1c4971ecbca019
-9	528	1775853851490688149	/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/cmake_install.cmake	6e5e9787e872ec54
-63	2544	1775853394070261243	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	e2e3d24a53d44e27
-228	299	1775480699319521107	Netspro	1322c74d1b609131
+598	804	1775913332226218533	release/Netspro	cc39e7befab54e8
 5	363	1775472889710681222	CMakeFiles/Netspro.dir/Plugins/JARVIS/main(TEMP).cpp.o	8f208967d4e0a57a
-2544	2784	1775853396551234671	release/Netspro	89853b2783ec1fde
-1	395	1775853851491471650	build.ninja	6e5e9787e872ec54
-1	395	1775853851491471650	/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/cmake_install.cmake	6e5e9787e872ec54
-4	1360	1775853851504179375	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	4c1c4971ecbca019
-4	1785	1775853903003219943	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	e2e3d24a53d44e27
-1785	1957	1775853904784197254	release/Netspro	89853b2783ec1fde
-12	1600	1775903430461102450	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	4c1c4971ecbca019
-11	1976	1775903430460096372	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	e2e3d24a53d44e27
-1976	2421	1775903432424850895	release/Netspro	89853b2783ec1fde
-3	1847	1775903795085176405	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	e2e3d24a53d44e27
-1847	2010	1775903796928700263	release/Netspro	89853b2783ec1fde
+228	299	1775480699319521107	Netspro	1322c74d1b609131
+13	598	1775913331641633321	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	a8a03c7a81aa9f39
+4	133	1775913621686031437	/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/cmake_install.cmake	6e5e9787e872ec54
+14	473	1775913331641999772	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	97b3902a59c2036f
+4	133	1775913621686750399	build.ninja	6e5e9787e872ec54
+11	2086	1775917885712374221	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	97b3902a59c2036f
+2087	2431	1775917887788058935	release/Netspro	cc39e7befab54e8

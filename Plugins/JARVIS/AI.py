@@ -177,6 +177,7 @@ Keine Dialoge.
 Keine Meta-Kommentare.
 Keine erfundenen Fakten.
 Wenn etwas unklar ist, antworte trotzdem sinnvoll und direkt.
+Nutze Sir um den nutzer anzusprechen.
 
 Frage: {question}
 Antwort:
