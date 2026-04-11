@@ -14,7 +14,14 @@ std::string runPython(const std::string& input) {
                              ? "AI.py"
                              : sourceFile.substr(0, pos + 1) + "AI.py";
 
-    std::string command = "python3 -u \"" + scriptPath + "\" --stream \"" + input + "\"";
+    std::string pythonCmd;
+#if defined(_WIN32) || defined(_WIN64)
+    pythonCmd = "py -3";
+#else
+    pythonCmd = "python3";
+#endif
+
+    std::string command = pythonCmd + " -u \"" + scriptPath + "\" --stream \"" + input + "\"";
     std::string result;
 
     FILE* pipe = nullptr;
