@@ -4,7 +4,7 @@
 
 #include "python_runner.h"
 #include <cstdio>
-#include <array>
+#include <iostream>
 #include <string>
 
 std::string runPython(const std::string& input) {
@@ -14,18 +14,20 @@ std::string runPython(const std::string& input) {
                              ? "AI.py"
                              : sourceFile.substr(0, pos + 1) + "AI.py";
 
-    std::string command = "python3 \"" + scriptPath + "\" \"" + input + "\"";
-
-    std::array<char, 256> buffer{};
+    std::string command = "python3 -u \"" + scriptPath + "\" --stream \"" + input + "\"";
     std::string result;
 
     FILE* pipe = popen(command.c_str(), "r");
     if (!pipe) {
-        return "Fehler beim Starten von Python!";
+        return "Error while starting Python!";
     }
 
-    while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
-        result += buffer.data();
+    int ch;
+    while ((ch = fgetc(pipe)) != EOF) {
+        char c = static_cast<char>(ch);
+        std::cout.put(c);
+        std::cout.flush();
+        result.push_back(c);
     }
 
     pclose(pipe);

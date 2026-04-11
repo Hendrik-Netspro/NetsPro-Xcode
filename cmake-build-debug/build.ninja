@@ -52,14 +52,14 @@ build cmake_object_order_depends_target_Netspro: phony || .
 build CMakeFiles/Netspro.dir/Netspro/main.cpp.o: CXX_COMPILER__Netspro_unscanned_Debug /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Netspro/main.cpp || cmake_object_order_depends_target_Netspro
   CONFIG = Debug
   DEP_FILE = CMakeFiles/Netspro.dir/Netspro/main.cpp.o.d
-  FLAGS = -g -arch arm64 -fcolor-diagnostics
+  FLAGS = -g -fcolor-diagnostics
   OBJECT_DIR = CMakeFiles/Netspro.dir
   OBJECT_FILE_DIR = CMakeFiles/Netspro.dir/Netspro
 
 build CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o: CXX_COMPILER__Netspro_unscanned_Debug /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Plugins/JARVIS/python_runner.cpp || cmake_object_order_depends_target_Netspro
   CONFIG = Debug
   DEP_FILE = CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o.d
-  FLAGS = -g -arch arm64 -fcolor-diagnostics
+  FLAGS = -g -fcolor-diagnostics
   OBJECT_DIR = CMakeFiles/Netspro.dir
   OBJECT_FILE_DIR = CMakeFiles/Netspro.dir/Plugins/JARVIS
 
@@ -73,7 +73,7 @@ build CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o: CXX_COMPILER__N
 
 build release/Netspro: CXX_EXECUTABLE_LINKER__Netspro_Debug CMakeFiles/Netspro.dir/Netspro/main.cpp.o CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o
   CONFIG = Debug
-  FLAGS = -g -arch arm64
+  FLAGS = -g
   LINK_FLAGS = -Wl,-search_paths_first -Wl,-headerpad_max_install_names
   OBJECT_DIR = CMakeFiles/Netspro.dir
   POST_BUILD = cd /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E make_directory /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/release/Plugins/JARVIS && /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E copy_if_different /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Plugins/JARVIS/AI.py /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/release/Plugins/JARVIS/AI.py

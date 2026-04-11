@@ -19,72 +19,72 @@
 #include "../Plugins/JARVIS/python_runner.h"
 
 // ===================== Declarations =====================
-void terminalLeeren();
-void benutzereingabeAbfragen();
-void hauptbildschirm();
-void verarbeiteEingabe();
-std::string holeSeriennummer();
-void anmeldung();
-void tokenInitialisierer();
+void clearTerminal();
+void readUserInput();
+void showMainScreen();
+void processInput();
+std::string getSerialNumber();
+void login();
+void initializeTokens();
 void logo();
 bool dev_mode = false;
 bool developer = false;
 // Jarvis
-void Start_Jarvis();
+void startJarvis();
 // AkteViewer
-void fake_loading(double zeit);
-void editor_interaktiv();
-void editor_datei(const std::string& dateiname);
-std::string neue_datei();
+void fakeLoading(double zeit);
+void openRecordInteractive();
+void openRecordFile(const std::string& fileName);
+std::string createNewRecord();
 // Crypto / File Utils
-std::string verschluesseln(const std::string& text);
-std::string entschluesseln(const std::string& text);
-std::string buchstaben_verschieben(const std::string& input_text, const std::vector<int>& verschiebungen);
-std::string buchstaben_entschluesseln(const std::string& text, const std::vector<int>& verschiebungen);
+std::string encryptText(const std::string& text);
+std::string decryptText(const std::string& text);
+std::string shiftLetters(const std::string& input_text, const std::vector<int>& shifts);
+std::string unshiftLetters(const std::string& text, const std::vector<int>& shifts);
 std::string trim(const std::string& s);
 std::string to_lower(std::string s);
 std::string to_upper(std::string s);
 std::string remove_spaces(const std::string& s);
 std::string read_file_utf8(const std::string& path);
 void write_file_utf8(const std::string& path, const std::string& content);
-std::string build_initials(const std::string& vollername);
+std::string buildInitials(const std::string& fullName);
 std::string shuffle_string(std::string s);
 long long random_int64(long long lo, long long hi);
 std::mt19937& rng();
 bool endsWith(const std::string& str, const std::string& suffix);
 
 // ===================== Variables =====================
-std::string eingabe;
-std::string version = "DEV1.1.1.3.ax20262A";
-std::string short_version = "DEV1.1.1.3";
-std::string seriennummer;
-std::string benutzername;
-std::string passwort;
-std::string gebildetesToken;
+std::string inputLine;
+std::string version = "DEV1.1.1.4.ax20262B";
+std::string short_version = "DEV1.1.1.4";
+std::string serialNumber;
+std::string username;
+std::string password;
+std::string composedToken;
 std::vector<std::string> userTokens;
 std::vector<std::string> devTokens;
 
 static const std::vector<int> SHIFT = {9, 9, 4, 13, 2, 10, 3};
 
 
-// ===================== Main ============================================================  BEGINN des codes
+// ===================== Main =====================
 int main() {
-    terminalLeeren();
-    tokenInitialisierer();
-    seriennummer = holeSeriennummer();
-    anmeldung();
+    clearTerminal();
+    initializeTokens();
+    serialNumber = getSerialNumber();
+    login();
 
     while (true) {
-        benutzereingabeAbfragen();
-        if (trim(eingabe) == "exit") break;
-        verarbeiteEingabe();
+        readUserInput();
+        if (trim(inputLine) == "exit") break;
+        processInput();
     }
 
     return 0;
 }
 
 // ===================== System Infos =====================
-std::string holeSeriennummer() {
+std::string getSerialNumber() {
     std::string result;
 
 
@@ -146,7 +146,7 @@ std::string holeSeriennummer() {
     return result;
 }
 
-void terminalLeeren() {
+void clearTerminal() {
 #if defined(_WIN32) || defined(_WIN64)
     std::system("cls");
 #else
@@ -154,77 +154,77 @@ void terminalLeeren() {
 #endif
 }
 
-void benutzereingabeAbfragen() {
-    std::cout << "NETSPECTRE@" << seriennummer;
+void readUserInput() {
+    std::cout << "NETSPECTRE@" << serialNumber;
     if (dev_mode) std::cout << "[DEV]";
     std::cout << ">>> ";
-    std::getline(std::cin, eingabe);
+    std::getline(std::cin, inputLine);
 }
 
 // ===================== Command Handling =====================
 static void help() {
     std::cout << "\nCommands:\n";
     std::cout << "  info                - Version/Serial\n";
-    std::cout << "  cls | clear          - Terminal leeren\n";
-    std::cout << "  cls -l | clear -l    - leeren + Logo neu anzeigen\n";
-    std::cout << "  akte                - AkteViewer (fragt Datei/neu)\n";
-    std::cout << "  akte neu            - neue Akte erstellen + öffnen\n";
-    std::cout << "  akte open <Name>    - <Name>.persondata öffnen\n";
-    std::cout << "  jarvis-serve        - startet den JARVIS-Chat\n";
-    std::cout << "  help                - diese Hilfe\n";
-    std::cout << "  exit                - beenden\n";
+    std::cout << "  cls | clear          - clear terminal\n";
+    std::cout << "  cls -l | clear -l    - clear + redraw logo\n";
+    std::cout << "  record              - AkteViewer interactive mode\n";
+    std::cout << "  record new          - create and open new record\n";
+    std::cout << "  record open <Name>  - open <Name>.persondata\n";
+    std::cout << "  jarvis-local        - start local JARVIS chat\n";
+    std::cout << "  help                - show command list\n";
+    std::cout << "  exit                - quit program\n";
     std::cout << "\nDev Commands:\n";
-    std::cout << "  devinfo             - zeigt Dev-Status\n";
-    std::cout << "  devmode on|off      - (nur DEV) toggle\n\n";
+    std::cout << "  devinfo             - show dev status\n";
+    std::cout << "  devmode on|off      - toggle (DEV only)\n\n";
 }
 
 static bool starts_with(const std::string& s, const std::string& prefix) {
     return s.rfind(prefix, 0) == 0;
 }
 
-void verarbeiteEingabe() {
-    std::string cmd = trim(eingabe);
+void processInput() {
+    std::string cmd = trim(inputLine);
 
     if (cmd == "info") {
         std::cout << "NetSpectre Pro Terminal C++ edition\n";
         std::cout << "V." << version << "\n";
-        std::cout << "Serial number: " << seriennummer << "\n";
+        std::cout << "Serial number: " << serialNumber << "\n";
         std::cout << "Dev mode: " << (dev_mode ? "true" : "false") << "\n";
     }
     else if (cmd == "cls" || cmd == "clear") {
-        terminalLeeren();
+        clearTerminal();
     }
     else if (cmd == "cls -l" || cmd == "clear -l") {
-        terminalLeeren();
-        hauptbildschirm();
+        clearTerminal();
+        showMainScreen();
     }
     else if (cmd == "help") {
         help();
     }
-    else if (cmd == "akte") {
-        editor_interaktiv();
-        terminalLeeren();
-        hauptbildschirm();
+    else if (cmd == "record") {
+        openRecordInteractive();
+        clearTerminal();
+        showMainScreen();
     }
-    else if (cmd == "akte neu") {
-        std::string dateiname = neue_datei();
-        editor_datei(dateiname);
-        terminalLeeren();
-        hauptbildschirm();
+    else if (cmd == "record new") {
+        std::string fileName = createNewRecord();
+        openRecordFile(fileName);
+        clearTerminal();
+        showMainScreen();
     }
-    else if (starts_with(cmd, "akte open ")) {
-        std::string name = trim(cmd.substr(std::string("akte open ").size()));
+    else if (starts_with(cmd, "record open ")) {
+        std::string name = trim(cmd.substr(std::string("record open ").size()));
         if (name.empty()) {
-            std::cout << "ERROR: Bitte Dateiname angeben.\n";
+            std::cout << "ERROR: Please provide a file name.\n";
             return;
         }
-        editor_datei(name);
-        terminalLeeren();
-        hauptbildschirm();
+        openRecordFile(name);
+        clearTerminal();
+        showMainScreen();
     }
     else if (cmd == "devinfo") {
         std::cout << "Developer mode is " << (dev_mode ? "ON" : "OFF") << "\n";
-        std::cout << "User: " << benutzername << "\n";
+        std::cout << "User: " << username << "\n";
     }
     else if (starts_with(cmd, "devmode ")) {
         std::string arg = to_lower(trim(cmd.substr(std::string("devmode ").size())));
@@ -239,62 +239,62 @@ void verarbeiteEingabe() {
     else if (cmd == "exit") {
         // main handles exit
     }
-    else if (to_lower(cmd) == "jarvis-serve") {
-        Start_Jarvis();
+    else if (to_lower(cmd) == "jarvis-local") {
+        startJarvis();
     }
     else {
         std::cout << "Command not found :(\n";
-        std::cout << "Tipp: 'help'\n";
+        std::cout << "Tip: 'help'\n";
     }
 }
 
 // ===================== Login =====================
-void tokenInitialisierer() {
-    // normale Nutzer
+void initializeTokens() {
+    // Regular users
     userTokens.emplace_back("Laurenz.Flecki66");
     userTokens.emplace_back("Hendrik.Hoppel10");
     userTokens.emplace_back("Joerg.hamburg");
 
-    // Entwickler
+    // Developers
     devTokens.emplace_back("Hendrik_dev.Hoppel10");
 }
 
-void anmeldung() {
+void login() {
     logo();
     std::cout << "\nUsername: ";
-    std::getline(std::cin, benutzername);
-    terminalLeeren();
+    std::getline(std::cin, username);
+    clearTerminal();
 
     logo();
-    std::cout << "\nPassword for " << benutzername << ": ";
-    std::getline(std::cin, passwort);
+    std::cout << "\nPassword for " << username << ": ";
+    std::getline(std::cin, password);
 
-    gebildetesToken = benutzername + "." + passwort;
+    composedToken = username + "." + password;
 
-    if (std::find(devTokens.begin(), devTokens.end(), gebildetesToken) != devTokens.end()) {
+    if (std::find(devTokens.begin(), devTokens.end(), composedToken) != devTokens.end()) {
         dev_mode = true;
         developer = true;
-        terminalLeeren();
+        clearTerminal();
         std::cout << "[Developer Mode]\n";
-        hauptbildschirm();
+        showMainScreen();
         return;
     }
 
-    if (std::find(userTokens.begin(), userTokens.end(), gebildetesToken) != userTokens.end()) {
+    if (std::find(userTokens.begin(), userTokens.end(), composedToken) != userTokens.end()) {
         dev_mode = false;
         developer = false;
-        terminalLeeren();
-        hauptbildschirm();
+        clearTerminal();
+        showMainScreen();
         return;
     }
 
     std::cout << "Username or password not recognized.\n";
     std::this_thread::sleep_for(std::chrono::seconds(4));
-    terminalLeeren();
-    anmeldung();
+    clearTerminal();
+    login();
 }
 
-void hauptbildschirm() {
+void showMainScreen() {
     if (dev_mode) {
         std::cout << "Version: " << version << "\n";
     }
@@ -324,7 +324,7 @@ void logo() {
     }
 }
 // ===================== JARVIS ==============================
-void Start_Jarvis() {
+void startJarvis() {
     std::string input;
 
     while (input != "exit") {
@@ -333,219 +333,221 @@ void Start_Jarvis() {
 
         if (input == "exit") break;
 
+        std::cout << "Jarvis: " << std::flush;
         std::string antwort = runPython(input);
-
-        std::cout << "Jarvis: " << antwort << std::endl;
+        if (antwort == "Error while starting Python!") {
+            std::cout << antwort << std::endl;
+        }
     }
 }
 // ===================== AkteViewer - UX =====================
-void fake_loading(double zeit) {
+void fakeLoading(double zeit) {
     constexpr int steps = 10;
-    double warten = zeit / static_cast<double>(steps);
+    double waitSeconds = zeit / static_cast<double>(steps);
 
-    for (int fsteps = 0; fsteps <= steps; ++fsteps) {
-        terminalLeeren();
-        std::cout << std::string(fsteps, 'X') << std::string(steps - fsteps, '0') << "\n";
-        auto ms = static_cast<int>(warten * 1000.0);
+    for (int fillSteps = 0; fillSteps <= steps; ++fillSteps) {
+        clearTerminal();
+        std::cout << std::string(fillSteps, 'X') << std::string(steps - fillSteps, '0') << "\n";
+        auto ms = static_cast<int>(waitSeconds * 1000.0);
         std::this_thread::sleep_for(std::chrono::milliseconds(ms));
     }
 }
 
-void editor_interaktiv() {
-    terminalLeeren();
-    std::string dateiname;
-    std::cout << "Welche Datei (Name) soll geoeffnet werden? (Neu = neue Akte): ";
-    std::getline(std::cin, dateiname);
-    dateiname = trim(dateiname);
+void openRecordInteractive() {
+    clearTerminal();
+    std::string fileName;
+    std::cout << "Which file name should be opened? (new = create new record): ";
+    std::getline(std::cin, fileName);
+    fileName = trim(fileName);
 
-    if (to_lower(dateiname) == "neu") {
-        dateiname = neue_datei();
+    if (to_lower(fileName) == "new") {
+        fileName = createNewRecord();
     }
 
-    editor_datei(dateiname);
+    openRecordFile(fileName);
 }
 
-void editor_datei(const std::string& dateiname) {
-    if (trim(dateiname).empty()) {
-        std::cout << "ERROR: Dateiname leer.\n";
+void openRecordFile(const std::string& fileName) {
+    if (trim(fileName).empty()) {
+        std::cout << "ERROR: Empty file name.\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
-    fake_loading(1);
-    terminalLeeren();
+    fakeLoading(1);
+    clearTerminal();
 
-    std::string fullname = dateiname + ".persondata";
+    std::string fullname = fileName + ".persondata";
     std::string content_encrypted;
 
     try {
         content_encrypted = read_file_utf8(fullname);
     } catch (...) {
-        std::cout << "ERROR: Datei nicht gefunden: " << fullname << "\n";
+        std::cout << "ERROR: File not found: " << fullname << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
-    std::string content_plain = entschluesseln(content_encrypted);
+    std::string content_plain = decryptText(content_encrypted);
 
-    terminalLeeren();
+    clearTerminal();
     std::cout << content_plain << "\n";
-    std::cout << "---- Neue Eintraege (leer = speichern & beenden) ----\n";
+    std::cout << "---- New entries (empty line = save & exit) ----\n";
 
     while (true) {
-        std::string neuer_eintrag;
+        std::string newEntry;
         std::cout << "> ";
-        std::getline(std::cin, neuer_eintrag);
+        std::getline(std::cin, newEntry);
 
-        if (trim(neuer_eintrag).empty()) {
-            fake_loading(1);
+        if (trim(newEntry).empty()) {
+            fakeLoading(1);
 
-            std::string verschluesselt_text = verschluesseln(content_plain);
+            std::string verschluesselt_text = encryptText(content_plain);
             try {
                 write_file_utf8(fullname, verschluesselt_text);
             } catch (...) {
-                std::cout << "ERROR: Konnte Datei nicht speichern.\n";
+                std::cout << "ERROR: Could not save file.\n";
                 std::this_thread::sleep_for(std::chrono::seconds(2));
                 return;
             }
 
-            terminalLeeren();
-            std::cout << "Gespeichert.\n";
+            clearTerminal();
+            std::cout << "Saved.\n";
             std::cout << "ENTER...";
             std::string dummy;
             std::getline(std::cin, dummy);
             return;
         }
 
-        content_plain += "\n" + neuer_eintrag;
+        content_plain += "\n" + newEntry;
 
-        terminalLeeren();
+        clearTerminal();
         std::cout << content_plain << "\n";
-        std::cout << "---- Neue Eintraege (leer = speichern & beenden) ----\n";
+        std::cout << "---- New entries (empty line = save & exit) ----\n";
     }
 }
 
-std::string neue_datei() {
+std::string createNewRecord() {
     while (true) {
-        terminalLeeren();
-        std::string vorname, name;
+        clearTerminal();
+        std::string firstName, name;
 
-        std::cout << "Vorname der Person: ";
-        std::getline(std::cin, vorname);
-        vorname = trim(vorname);
+        std::cout << "First name: ";
+        std::getline(std::cin, firstName);
+        firstName = trim(firstName);
 
-        std::cout << "Nachname der Person: ";
+        std::cout << "Last name: ";
         std::getline(std::cin, name);
         name = trim(name);
 
         if (name.empty()) {
-            std::cout << "ERROR: Nachname kann nicht leer sein\n";
+            std::cout << "ERROR: Last name cannot be empty\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             continue;
         }
 
-        std::string vollername = trim(vorname + " " + name);
-        std::string dateiname = remove_spaces(vollername);
-        std::string fullname = dateiname + ".persondata";
+        std::string fullName = trim(firstName + " " + name);
+        std::string fileName = remove_spaces(fullName);
+        std::string fullname = fileName + ".persondata";
 
         std::string key;
-        std::cout << "Bitte KEY eingeben (leer = zufaelliger Key): ";
+        std::cout << "Enter KEY (empty = random key): ";
         std::getline(std::cin, key);
         key = trim(key);
 
         if (key.empty()) {
-            std::string initialen = build_initials(vollername);
+            std::string initials = buildInitials(fullName);
             long long number = random_int64(1000000000LL, 99999999999LL);
-            std::string chars = to_lower(dateiname);
+            std::string chars = to_lower(fileName);
             std::string shuffled = shuffle_string(chars);
-            key = initialen + std::to_string(number) + shuffled;
+            key = initials + std::to_string(number) + shuffled;
         }
 
-        terminalLeeren();
-        std::cout << "Der neue Key ist:\n" << key << "\n";
+        clearTerminal();
+        std::cout << "New key:\n" << key << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
 
         std::string default_plain;
-        default_plain += "----- " + vollername + " -----\n";
+        default_plain += "----- " + fullName + " -----\n";
         default_plain += "- " + key + " -\n";
-        default_plain += "-Name: " + to_upper(name) + "\n";
-        default_plain += "-Vorname: " + vorname + "\n";
+        default_plain += "-Last name: " + to_upper(name) + "\n";
+        default_plain += "-First name: " + firstName + "\n";
 
-        std::string default_encrypted = verschluesseln(default_plain);
+        std::string default_encrypted = encryptText(default_plain);
 
-        terminalLeeren();
-        std::cout << "Datei wird erstellt...\n";
+        clearTerminal();
+        std::cout << "Creating file...\n";
 
         try {
             write_file_utf8(fullname, default_encrypted);
         } catch (...) {
-            std::cout << "ERROR: Konnte Datei nicht schreiben: " << fullname << "\n";
+            std::cout << "ERROR: Could not write file: " << fullname << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             continue;
         }
 
-        fake_loading(2);
-        return dateiname;
+        fakeLoading(2);
+        return fileName;
     }
 }
 
 // ===================== Crypto =====================
-std::string buchstaben_verschieben(const std::string& input_text,const std::vector<int>& verschiebungen) {
-    std::string verschluesselt;
-    verschluesselt.reserve(input_text.size());
-    size_t verschiebungs_index = 0;
+std::string shiftLetters(const std::string& input_text,const std::vector<int>& shifts) {
+    std::string encrypted;
+    encrypted.reserve(input_text.size());
+    size_t shiftIndex = 0;
 
     for (unsigned char uc : input_text) {
-        char buchstabe = static_cast<char>(uc);
+        char letter = static_cast<char>(uc);
 
         if (std::isalpha(uc)) {
-            char basis = std::isupper(uc) ? 'A' : 'a';
-            int verschiebung = verschiebungen[verschiebungs_index % verschiebungen.size()];
+            char base = std::isupper(uc) ? 'A' : 'a';
+            int shift = shifts[shiftIndex % shifts.size()];
 
-            char neuer_buchstabe = static_cast<char>(
-                ((buchstabe - basis + verschiebung) % 26) + basis
+            char newLetter = static_cast<char>(
+                ((letter - base + shift) % 26) + base
             );
 
-            verschluesselt.push_back(neuer_buchstabe);
-            ++verschiebungs_index;
+            encrypted.push_back(newLetter);
+            ++shiftIndex;
         } else {
-            verschluesselt.push_back(buchstabe);
+            encrypted.push_back(letter);
         }
     }
-    return verschluesselt;
+    return encrypted;
 }
 
-std::string buchstaben_entschluesseln(const std::string& text,const std::vector<int>& verschiebungen) {
-    std::string entschluesselt;
-    entschluesselt.reserve(text.size());
-    size_t verschiebungs_index = 0;
+std::string unshiftLetters(const std::string& text,const std::vector<int>& shifts) {
+    std::string decrypted;
+    decrypted.reserve(text.size());
+    size_t shiftIndex = 0;
 
     for (unsigned char uc : text) {
-        char buchstabe = static_cast<char>(uc);
+        char letter = static_cast<char>(uc);
 
         if (std::isalpha(uc)) {
-            char basis = std::isupper(uc) ? 'A' : 'a';
-            int verschiebung = verschiebungen[verschiebungs_index % verschiebungen.size()];
+            char base = std::isupper(uc) ? 'A' : 'a';
+            int shift = shifts[shiftIndex % shifts.size()];
 
-            char neuer_buchstabe = static_cast<char>(
-                ((buchstabe - basis - verschiebung + 26) % 26) + basis
+            char newLetter = static_cast<char>(
+                ((letter - base - shift + 26) % 26) + base
             );
 
-            entschluesselt.push_back(neuer_buchstabe);
-            ++verschiebungs_index;
+            decrypted.push_back(newLetter);
+            ++shiftIndex;
         } else {
-            entschluesselt.push_back(buchstabe);
+            decrypted.push_back(letter);
         }
     }
-    return entschluesselt;
+    return decrypted;
 }
 
-std::string verschluesseln(const std::string& text) {
-    return buchstaben_verschieben(text, SHIFT);
+std::string encryptText(const std::string& text) {
+    return shiftLetters(text, SHIFT);
 }
 
-std::string entschluesseln(const std::string& text) {
-    return buchstaben_entschluesseln(text, SHIFT);
+std::string decryptText(const std::string& text) {
+    return unshiftLetters(text, SHIFT);
 }
 
 // ===================== File Utils =====================
@@ -609,10 +611,10 @@ std::string shuffle_string(std::string s) {
     return s;
 }
 
-std::string build_initials(const std::string& vollername) {
+std::string buildInitials(const std::string& fullName) {
     std::string initials;
     bool newWord = true;
-    for (unsigned char uc : vollername) {
+    for (unsigned char uc : fullName) {
         if (std::isspace(uc)) {
             newWord = true;
         } else if (newWord) {

@@ -1,12 +1,46 @@
 import re
 import sys
+import time
+import threading
+
 from ollama import generate
 import Tools as t
 
 
+# ===================== THINKING INDICATOR =====================
+class ThinkingIndicator:
+    def __init__(self, text="==> Jarvis denkt"):
+        self.text = text
+        self._stop = threading.Event()
+        self._thread = None
+
+    def _run(self):
+        frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
+        i = 0
+        while not self._stop.is_set():
+            frame = frames[i % len(frames)]
+            sys.stderr.write(f"\r{self.text} {frame}")
+            sys.stderr.flush()
+            time.sleep(0.08)
+            i += 1
+
+    def __enter__(self):
+        self._stop.clear()
+        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._thread.start()
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=0.3)
+        sys.stderr.write("\r" + " " * (len(self.text) + 4) + "\r")
+        sys.stderr.flush()
+
+
 # ===================== RULE ROUTER =====================
-def first_routing(q):
-    q = q.lower().strip()
+def first_routing(question):
+    q = question.lower().strip()
 
     # SMART Prefix
     if q.startswith(("sei genau", "genau", "detailliert")):
@@ -50,9 +84,6 @@ def first_routing(q):
     ]):
         return "S"
 
-    if "c++" in q and any(word in q for word in ["erkläre", "vererbung", "klasse"]):
-        return "S"
-
     if len(q) > 120:
         return "S"
 
@@ -76,21 +107,12 @@ Frage: {question}
 Antwort:
 """
 
-    response = generate(
-        model="qwen2:1.5b",
-        prompt=prompt
-    )
+    with ThinkingIndicator():
+        response = generate(model="qwen2:1.5b", prompt=prompt)
 
     answer = response["response"].strip().upper()
-
-    if answer == "T":
-        return "T"
-    if answer == "S":
-        return "S"
-    if answer == "F":
-        return "F"
-    if answer == "N":
-        return "N"
+    if answer in ["F", "S", "T", "N"]:
+        return answer
     return "N"
 
 
@@ -114,40 +136,38 @@ Frage: {question}
 Antwort:
 """
 
-    response = generate(
-        model="phi3.5:latest",
-        prompt=prompt
-    )
+    with ThinkingIndicator():
+        response = generate(model="phi3.5:latest", prompt=prompt)
 
     answer = response["response"].strip().upper()
-
-    if answer == "T":
-        return "T"
-    if answer == "S":
-        return "S"
-    if answer == "F":
-        return "F"
+    if answer in ["F", "S", "T"]:
+        return answer
     return "F"
 
 
 # ===================== CLEANER =====================
 def clean_output(text):
-    banned_parts = [
-        "User:",
-        "Assistant:",
-        "In simple terms",
-        "奔"
-    ]
-
+    banned_parts = ["User:", "Assistant:", "In simple terms", "奔"]
     for bad in banned_parts:
         if bad in text:
             text = text.split(bad)[0]
-
     return text.strip()
 
 
+def stream_model_response(model, prompt):
+    chunks = []
+    for part in generate(model=model, prompt=prompt, stream=True):
+        token = part.get("response", "")
+        if not token:
+            continue
+        chunks.append(token)
+        print(token, end="", flush=True)
+    print()
+    return clean_output("".join(chunks))
+
+
 # ===================== FAST AI =====================
-def fast_ai(question):
+def fast_ai(question, stream=False):
     prompt = f"""Du bist Jarvis.
 Antworte nur auf Deutsch.
 Kurz, klar, natürlich.
@@ -162,17 +182,17 @@ Frage: {question}
 Antwort:
 """
 
-    response = generate(
-        model="qwen2:1.5b",
-        prompt=prompt
-    )
+    if stream:
+        return stream_model_response("qwen2:1.5b", prompt)
 
-    text = response["response"].strip()
-    return clean_output(text)
+    with ThinkingIndicator():
+        response = generate(model="qwen2:1.5b", prompt=prompt)
+
+    return clean_output(response["response"].strip())
 
 
 # ===================== SMART AI =====================
-def smart_ai(question):
+def smart_ai(question, stream=False):
     prompt = f"""Du bist Jarvis.
 Antworte nur auf Deutsch.
 Erkläre klar, ordentlich und verständlich.
@@ -187,13 +207,13 @@ Frage: {question}
 Antwort:
 """
 
-    response = generate(
-        model="llama3:latest",
-        prompt=prompt
-    )
+    if stream:
+        return stream_model_response("llama3:latest", prompt)
 
-    text = response["response"].strip()
-    return clean_output(text)
+    with ThinkingIndicator():
+        response = generate(model="llama3:latest", prompt=prompt)
+
+    return clean_output(response["response"].strip())
 
 
 # ===================== TOOL AI =====================
@@ -213,7 +233,7 @@ Nutze ein Tool nur bei:
 - a+b -> calcplus
 - a-b -> calcminus
 - a*b -> calcmulti
-- a/b oder a:b -> calcdivide
+- a/b or a:b -> calcdivide
 
 Wichtig:
 - Bei Rechnung immer nur die zwei Zahlen aus der Frage nehmen.
@@ -251,10 +271,8 @@ Frage: {question}
 Antwort:
 """
 
-    response = generate(
-        model="qwen2:1.5b",
-        prompt=prompt
-    )
+    with ThinkingIndicator():
+        response = generate(model="qwen2:1.5b", prompt=prompt)
 
     text = response["response"].strip()
     lines = text.splitlines()
@@ -299,12 +317,9 @@ Antwort:
                 return {
                     "answer": "Tool-Fehler: ARGS1 oder ARGS2 fehlt.",
                     "tool": tool,
-                    "args": {
-                        "ARGS1": arg1,
-                        "ARGS2": arg2
-                    },
+                    "args": {"ARGS1": arg1, "ARGS2": arg2},
                     "tool_result": None,
-                    "raw_tool_output": text
+                    "raw_tool_output": text,
                 }
             return "Tool-Fehler: ARGS1 oder ARGS2 fehlt."
 
@@ -314,7 +329,7 @@ Antwort:
             tool_response = t.calcminus(arg1, arg2)
         elif tool == "calcmulti":
             tool_response = t.calcmulti(arg1, arg2)
-        elif tool == "calcdivide":
+        else:
             tool_response = t.calcdivide(arg1, arg2)
 
         answer = f"Ergebnis: {tool_response}."
@@ -323,12 +338,9 @@ Antwort:
             return {
                 "answer": text,
                 "tool": tool,
-                "args": {
-                    "ARGS1": arg1,
-                    "ARGS2": arg2
-                },
+                "args": {"ARGS1": arg1, "ARGS2": arg2},
                 "tool_result": None,
-                "raw_tool_output": text
+                "raw_tool_output": text,
             }
         return text
 
@@ -338,35 +350,20 @@ Antwort:
         return {
             "answer": answer,
             "tool": tool,
-            "args": {
-                "ARGS1": arg1,
-                "ARGS2": arg2
-            },
+            "args": {"ARGS1": arg1, "ARGS2": arg2},
             "tool_result": tool_response,
-            "raw_tool_output": text
+            "raw_tool_output": text,
         }
 
     return answer
 
 
-def fast_ai_tool(question, tool_res, tool):
-    if tool in ["calcplus", "calcminus", "calcmulti", "calcdivide"]:
-        return f"Ergebnis: {tool_res}."
-
-    if tool == "time":
-        return f"Die Uhrzeit ist {tool_res}."
-
-    return str(tool_res)
-
-
-
 # ===================== CORE LOGIC =====================
-def ask_jarvis(question):
+def ask_jarvis(question, stream=False):
     route = first_routing(question)
 
     if route is None or route == "N":
         route = ai_router_fast(question)
-
         if route == "N":
             route = ai_router(question)
 
@@ -376,9 +373,9 @@ def ask_jarvis(question):
     raw_tool_output = None
 
     if route == "F":
-        answer = fast_ai(question)
+        answer = fast_ai(question, stream=stream)
     elif route == "S":
-        answer = smart_ai(question)
+        answer = smart_ai(question, stream=stream)
     elif route == "T":
         tool_debug = tool_ai(question, debug=True)
         answer = tool_debug["answer"]
@@ -396,13 +393,13 @@ def ask_jarvis(question):
         "tool": tool,
         "args": args,
         "tool_result": tool_result,
-        "raw_tool_output": raw_tool_output
+        "raw_tool_output": raw_tool_output,
     }
 
 
 # ===================== CLI OUTPUT =====================
-def cli_run(question, debug=False):
-    result = ask_jarvis(question)
+def cli_run(question, debug=False, stream=False):
+    result = ask_jarvis(question, stream=stream)
 
     if debug:
         print("========== DEBUG ==========")
@@ -419,6 +416,8 @@ def cli_run(question, debug=False):
         print(result["answer"])
         print("===========================")
     else:
+        if stream and result["route"] in ["F", "S"]:
+            return
         print(result["answer"])
 
 
@@ -429,10 +428,14 @@ def main():
         return
 
     debug_mode = False
+    stream_mode = False
     args = sys.argv[1:]
 
-    if args and args[0] == "--debug":
-        debug_mode = True
+    while args and args[0] in ["--debug", "--stream"]:
+        if args[0] == "--debug":
+            debug_mode = True
+        elif args[0] == "--stream":
+            stream_mode = True
         args = args[1:]
 
     if not args:
@@ -440,7 +443,7 @@ def main():
         return
 
     user_question = " ".join(args)
-    cli_run(user_question, debug=debug_mode)
+    cli_run(user_question, debug=debug_mode, stream=stream_mode)
 
 
 if __name__ == "__main__":
