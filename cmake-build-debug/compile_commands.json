@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug",
+  "command": "/usr/bin/c++ -g -std=gnu++14 -arch arm64 -fcolor-diagnostics -o CMakeFiles/Netspro.dir/Netspro/main.cpp.o -c /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Netspro/main.cpp",
+  "file": "/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Netspro/main.cpp",
+  "output": "/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/CMakeFiles/Netspro.dir/Netspro/main.cpp.o"
+},
+{
+  "directory": "/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug",
+  "command": "/usr/bin/c++ -g -std=gnu++14 -arch arm64 -fcolor-diagnostics -o CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o -c /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Plugins/JARVIS/python_runner.cpp",
+  "file": "/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Plugins/JARVIS/python_runner.cpp",
+  "output": "/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o"
+},
+{
+  "directory": "/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug",
+  "command": "/usr/bin/c++ -g -std=gnu++14 -arch arm64 -fcolor-diagnostics -o CMakeFiles/Netspro.dir/Plugins/Config_editor/json_editor.cpp.o -c \"/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Plugins/Config editor/json_editor.cpp\"",
+  "file": "/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Plugins/Config editor/json_editor.cpp",
+  "output": "/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/CMakeFiles/Netspro.dir/Plugins/Config_editor/json_editor.cpp.o"
+}
+]

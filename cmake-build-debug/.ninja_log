@@ -1,12 +1,18 @@
 # ninja log v6
-598	804	1775913332226218533	release/Netspro	cc39e7befab54e8
+1734	1986	1775918427291600464	release/Netspro	cc39e7befab54e8
 5	363	1775472889710681222	CMakeFiles/Netspro.dir/Plugins/JARVIS/main(TEMP).cpp.o	8f208967d4e0a57a
 228	299	1775480699319521107	Netspro	1322c74d1b609131
 13	598	1775913331641633321	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	a8a03c7a81aa9f39
-4	133	1775913621686031437	/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/cmake_install.cmake	6e5e9787e872ec54
-14	473	1775913331641999772	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	97b3902a59c2036f
-4	133	1775913621686750399	build.ninja	6e5e9787e872ec54
-11	2086	1775917885712374221	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	97b3902a59c2036f
-2087	2431	1775917887788058935	release/Netspro	cc39e7befab54e8
+4	133	1775996984707029270	/Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/cmake-build-debug/cmake_install.cmake	6e5e9787e872ec54
 8	1734	1775918425565237889	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	97b3902a59c2036f
-1734	1986	1775918427291600464	release/Netspro	cc39e7befab54e8
+4	133	1775996984707855774	build.ninja	6e5e9787e872ec54
+11	418	1776006219128320814	CMakeFiles/Netspro.dir/Plugins/Config_editor/json_editor.cpp.o	b084fed4692248e0
+10	2626	1776006219127315724	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	a8a03c7a81aa9f39
+2626	2958	1776006221743293607	release/Netspro	ca48ae83e5ac478b
+28	822	1776010528375237477	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	a8a03c7a81aa9f39
+822	1009	1776010529169750626	release/Netspro	ca48ae83e5ac478b
+6	1943	1776591203956863654	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	97b3902a59c2036f
+5	2288	1776591203956074078	CMakeFiles/Netspro.dir/Netspro/main.cpp.o	a8a03c7a81aa9f39
+2288	2656	1776591206239041469	release/Netspro	ca48ae83e5ac478b
+4	1213	1776591231462931315	CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o	97b3902a59c2036f
+1213	1383	1776591232671170511	release/Netspro	ca48ae83e5ac478b

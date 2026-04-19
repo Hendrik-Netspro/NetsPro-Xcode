@@ -22,6 +22,11 @@ std::string runPython(const std::string& input) {
 #endif
 
     std::string command = pythonCmd + " -u \"" + scriptPath + "\" --stream \"" + input + "\"";
+#if defined(_WIN32) || defined(_WIN64)
+    command += " 2>NUL";
+#else
+    command += " 2>/dev/null";
+#endif
     std::string result;
 
     FILE* pipe = nullptr;
@@ -31,7 +36,7 @@ std::string runPython(const std::string& input) {
     pipe = popen(command.c_str(), "r");
 #endif
     if (!pipe) {
-        return "Error while starting Python!";
+        return "JARVIS_ERROR: Could not start Python runtime.";
     }
 
     int ch;
@@ -43,9 +48,18 @@ std::string runPython(const std::string& input) {
     }
 
 #if defined(_WIN32) || defined(_WIN64)
-    _pclose(pipe);
+    int exitCode = _pclose(pipe);
 #else
-    pclose(pipe);
+    int exitCode = pclose(pipe);
 #endif
+
+    if (exitCode != 0) {
+        return "JARVIS_ERROR: Local AI service is currently unavailable. Please verify Python, Ollama, and pulled models.";
+    }
+
+    if (result.empty()) {
+        return "JARVIS_ERROR: No response from local AI service. Please check Ollama service status.";
+    }
+
     return result;
 }

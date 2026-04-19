@@ -13,6 +13,12 @@ Credentials are not public. If you need access, request a username/password from
 
 **Hendrik Hanking** — `hendrik.hanking@icloud.com`
 
+## Account Tiers
+
+- **User**: default account commands
+- **Pro Basic**: includes User commands + Pro Basic commands
+- **Developer**: includes User + Pro Basic + Developer commands
+
 ## Quick Start
 
 ### macOS
@@ -122,21 +128,22 @@ python3 -m pip install --upgrade pip ollama
 brew install --cask ollama
 ollama pull qwen2:1.5b
 ollama pull phi3.5:latest
-ollama pull llama3:latest
+ollama pull mistral:latest
 ```
 
 ### Windows 11 (PowerShell)
 
 ```powershell
 py -m pip install --upgrade pip ollama
-winget install --id Ollama.Ollama -e --accept-package-agreements --accept-source-agreements
+irm https://ollama.com/install.ps1 | iex
 ollama pull qwen2:1.5b
 ollama pull phi3.5:latest
-ollama pull llama3:latest
+ollama pull mistral:latest
 ```
 
-If `winget` reports that the install was canceled by the user, run PowerShell as Administrator and retry.  
-If it still fails, install Ollama directly from: https://ollama.com/download/windows
+If the install script fails, run PowerShell as Administrator and retry.  
+Alternative fallback: install Ollama directly from https://ollama.com/download/windows or try:
+`winget install --id Ollama.Ollama -e --accept-package-agreements --accept-source-agreements`
 
 Then start NetSpectre Pro and run:
 
@@ -183,6 +190,17 @@ jarvis-local
 - `devmode on|off`  
   Toggles dev mode (developer login required).
 
+- `devtools`  
+  Lists available developer tool commands.
+
+### Pro Basic commands
+
+- `proinfo`  
+  Shows Pro Basic account status and current user.
+
+- `prostatus`  
+  Shows currently available Pro Basic feature set.
+
 ## Build Notes
 
 - The project builds via CMake and outputs the executable to `build/release/`.
@@ -210,7 +228,7 @@ jarvis-local
   - Ollama is installed and running
   - required models are pulled
   - Python package `ollama` is installed
-  - on Windows, `winget` install was not canceled (`--accept-package-agreements --accept-source-agreements`)
+  - on Windows, Ollama install completed successfully (`irm https://ollama.com/install.ps1 | iex`)
 
 ## License / Copyright
 

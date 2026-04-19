@@ -22,6 +22,8 @@ endif()
 add_executable(Netspro
         Netspro/main.cpp
         Plugins/JARVIS/python_runner.cpp
+        "Plugins/Config editor/json_editor.cpp"
+        "Plugins/Config editor/json_editor.h"
 )
 
 set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/release")

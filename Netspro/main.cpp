@@ -29,6 +29,7 @@ void initializeTokens();
 void logo();
 bool dev_mode = false;
 bool developer = false;
+bool pro_basic = false;
 // Jarvis
 void startJarvis();
 // AkteViewer
@@ -62,6 +63,7 @@ std::string username;
 std::string password;
 std::string composedToken;
 std::vector<std::string> userTokens;
+std::vector<std::string> proBasicTokens;
 std::vector<std::string> devTokens;
 
 static const std::vector<int> SHIFT = {9, 9, 4, 13, 2, 10, 3};
@@ -157,6 +159,7 @@ void clearTerminal() {
 void readUserInput() {
     std::cout << "NETSPECTRE@" << serialNumber;
     if (dev_mode) std::cout << "[DEV]";
+    else if (pro_basic) std::cout << "[PRO]";
     std::cout << ">>> ";
     std::getline(std::cin, inputLine);
 }
@@ -173,9 +176,13 @@ static void help() {
     std::cout << "  jarvis-local        - start local JARVIS chat\n";
     std::cout << "  help                - show command list\n";
     std::cout << "  exit                - quit program\n";
+    std::cout << "\nPro Basic Commands:\n";
+    std::cout << "  proinfo             - show Pro Basic account info\n";
+    std::cout << "  prostatus           - show Pro Basic feature status\n";
     std::cout << "\nDev Commands:\n";
     std::cout << "  devinfo             - show dev status\n";
     std::cout << "  devmode on|off      - toggle (DEV only)\n\n";
+    std::cout << "  devtools            - list developer tool commands\n\n";
 }
 
 static bool starts_with(const std::string& s, const std::string& prefix) {
@@ -226,6 +233,24 @@ void processInput() {
         std::cout << "Developer mode is " << (dev_mode ? "ON" : "OFF") << "\n";
         std::cout << "User: " << username << "\n";
     }
+    else if (cmd == "proinfo") {
+        if (!pro_basic && !developer) {
+            std::cout << "Access denied (PRO BASIC or DEV only).\n";
+            return;
+        }
+        std::cout << "Pro Basic account active: " << ((pro_basic || developer) ? "true" : "false") << "\n";
+        std::cout << "User: " << username << "\n";
+    }
+    else if (cmd == "prostatus") {
+        if (!pro_basic && !developer) {
+            std::cout << "Access denied (PRO BASIC or DEV only).\n";
+            return;
+        }
+        std::cout << "[PRO BASIC] Features available:\n";
+        std::cout << "- Priority account tier\n";
+        std::cout << "- Extended command set (proinfo/prostatus)\n";
+        std::cout << "- Record + JARVIS access\n";
+    }
     else if (starts_with(cmd, "devmode ")) {
         std::string arg = to_lower(trim(cmd.substr(std::string("devmode ").size())));
         if (!developer) {
@@ -235,6 +260,16 @@ void processInput() {
         if (arg == "on") dev_mode = true;
         else if (arg == "off") dev_mode = false;
         else std::cout << "Usage: devmode on|off\n";
+    }
+    else if (cmd == "devtools") {
+        if (!developer) {
+            std::cout << "Access denied (DEV only).\n";
+            return;
+        }
+        std::cout << "[DEV TOOLS]\n";
+        std::cout << "- devinfo\n";
+        std::cout << "- devmode on|off\n";
+        std::cout << "- devtools\n";
     }
     else if (cmd == "exit") {
         // main handles exit
@@ -255,6 +290,10 @@ void initializeTokens() {
     userTokens.emplace_back("Hendrik.Hoppel10");
     userTokens.emplace_back("Joerg.hamburg");
 
+    // Pro Basic users
+    proBasicTokens.emplace_back("Hendrik_pro.Hoppel10");
+    proBasicTokens.emplace_back("Laura_pro.Basic42");
+
     // Developers
     devTokens.emplace_back("Hendrik_dev.Hoppel10");
 }
@@ -274,8 +313,19 @@ void login() {
     if (std::find(devTokens.begin(), devTokens.end(), composedToken) != devTokens.end()) {
         dev_mode = true;
         developer = true;
+        pro_basic = true;
         clearTerminal();
         std::cout << "[Developer Mode]\n";
+        showMainScreen();
+        return;
+    }
+
+    if (std::find(proBasicTokens.begin(), proBasicTokens.end(), composedToken) != proBasicTokens.end()) {
+        dev_mode = false;
+        developer = false;
+        pro_basic = true;
+        clearTerminal();
+        std::cout << "[Pro Basic Account]\n";
         showMainScreen();
         return;
     }
@@ -283,6 +333,7 @@ void login() {
     if (std::find(userTokens.begin(), userTokens.end(), composedToken) != userTokens.end()) {
         dev_mode = false;
         developer = false;
+        pro_basic = false;
         clearTerminal();
         showMainScreen();
         return;
@@ -297,6 +348,11 @@ void login() {
 void showMainScreen() {
     if (dev_mode) {
         std::cout << "Version: " << version << "\n";
+    }
+    else if (pro_basic) {
+        std::cout << "Welcome to NETSPECTRE PRO C++ [PRO BASIC]\n";
+        std::cout << "Version: " << short_version << "\n";
+        std::cout << "Feedback: Hendrik.Hanking@icloud.com.\n";
     }
     else {
         std::cout << "Welcome to NETSPECTRE PRO C++\n";
@@ -335,8 +391,10 @@ void startJarvis() {
 
         std::cout << "Jarvis: " << std::flush;
         std::string antwort = runPython(input);
-        if (antwort == "Error while starting Python!") {
-            std::cout << antwort << std::endl;
+
+        if (starts_with(antwort, "JARVIS_ERROR:")) {
+            std::string friendly = trim(antwort.substr(std::string("JARVIS_ERROR:").size()));
+            std::cout << friendly << std::endl;
         }
     }
 }

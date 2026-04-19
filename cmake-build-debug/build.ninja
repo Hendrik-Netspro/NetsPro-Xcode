@@ -63,6 +63,13 @@ build CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o: CXX_COMPILER__N
   OBJECT_DIR = CMakeFiles/Netspro.dir
   OBJECT_FILE_DIR = CMakeFiles/Netspro.dir/Plugins/JARVIS
 
+build CMakeFiles/Netspro.dir/Plugins/Config_editor/json_editor.cpp.o: CXX_COMPILER__Netspro_unscanned_Debug /Users/hendrikhanking/Projekte/Netspro-cpp/Netspro/Plugins/Config$ editor/json_editor.cpp || cmake_object_order_depends_target_Netspro
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/Netspro.dir/Plugins/Config_editor/json_editor.cpp.o.d
+  FLAGS = -g -std=gnu++14 -arch arm64 -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/Netspro.dir
+  OBJECT_FILE_DIR = CMakeFiles/Netspro.dir/Plugins/Config_editor
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Netspro
@@ -71,7 +78,7 @@ build CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o: CXX_COMPILER__N
 #############################################
 # Link the executable release/Netspro
 
-build release/Netspro: CXX_EXECUTABLE_LINKER__Netspro_Debug CMakeFiles/Netspro.dir/Netspro/main.cpp.o CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o
+build release/Netspro: CXX_EXECUTABLE_LINKER__Netspro_Debug CMakeFiles/Netspro.dir/Netspro/main.cpp.o CMakeFiles/Netspro.dir/Plugins/JARVIS/python_runner.cpp.o CMakeFiles/Netspro.dir/Plugins/Config_editor/json_editor.cpp.o
   CONFIG = Debug
   FLAGS = -g -arch arm64
   LINK_FLAGS = -Wl,-search_paths_first -Wl,-headerpad_max_install_names

@@ -532,8 +532,4 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception:
-        # Keep CLI output demo-friendly; C++ side maps non-zero exit to a clean message.
-        sys.exit(1)
+    main()
